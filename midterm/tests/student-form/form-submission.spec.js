@@ -7,7 +7,7 @@ test.describe('Student Form Submission', () => {
   });
 
 
-  // TC01
+
   test('TC01: Submit form with required fields only', async ({ page }) => {
 
     await page.fill('#firstName', 'John');
@@ -31,7 +31,6 @@ test.describe('Student Form Submission', () => {
 
 
 
-  // TC02
   test('TC02: Submit form with all fields filled', async ({ page }) => {
 
     await page.fill('#firstName', 'Jane');
@@ -43,27 +42,25 @@ test.describe('Student Form Submission', () => {
 
     await page.fill('#userNumber', '0899999999');
 
-    // Date of Birth
     await page.click('#dateOfBirthInput');
     await page.click('.react-datepicker__day--015');
 
-    // Subjects
     await page.fill('#subjectsInput', 'Maths');
     await page.keyboard.press('Enter');
 
-    // Hobbies
+
     await page.click('label[for="hobbies-checkbox-1"]');
 
-    // Picture Upload
+
     await page.setInputFiles('#uploadPicture', '../midterm/test-data/test-image.png');
-    // Address
+ 
     await page.fill('#currentAddress', 'Bangkok Thailand');
 
-    // State
+
     await page.click('#state');
     await page.click('text=NCR');
 
-    // City
+
     await page.click('#city');
     await page.click('text=Delhi');
 
@@ -79,4 +76,29 @@ test.describe('Student Form Submission', () => {
     await expect(page.locator('table')).toContainText('NCR Delhi');
   });
 
+
+  test('TC03: Prevent submission when required fields are empty', async ({ page }) => {
+    
+
+    await page.fill('#userEmail', 'jane@test.com');
+    await page.click('#dateOfBirthInput');
+    await page.click('.react-datepicker__day--015');
+    await page.fill('#subjectsInput', 'Maths');
+    await page.keyboard.press('Enter');
+    await page.click('label[for="hobbies-checkbox-1"]');
+
+    await page.setInputFiles('#uploadPicture', '../midterm/test-data/test-image.png');
+    await page.fill('#currentAddress', 'Bangkok Thailand');
+
+    await page.click('#state');
+    await page.click('text=NCR');
+
+    await page.click('#city');
+    await page.click('text=Delhi');
+
+    await page.click('#submit');
+
+    await expect(page.locator('.modal-title')).not.toBeVisible();
+
+  });
 });
